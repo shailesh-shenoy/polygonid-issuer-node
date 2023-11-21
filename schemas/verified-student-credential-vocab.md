@@ -1,6 +1,6 @@
 # studentAddressInteger
 
-Describes the VC holder's wallet address as an integer.
+Describes the VC holder's wallet address converted to uint256.
 
 # isVerifiedStudent
 
