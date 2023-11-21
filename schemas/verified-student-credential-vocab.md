@@ -1,6 +1,6 @@
 # studentAddress
 
-Describes the VC holder's wallet address converted to uint256.
+Describes the last 15 digits of VC holder's wallet address converted to uint256.
 
 # isVerifiedStudent
 
