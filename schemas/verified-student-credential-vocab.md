@@ -1,4 +1,4 @@
-# studentAddressInteger
+# studentAddress
 
 Describes the VC holder's wallet address converted to uint256.
 
