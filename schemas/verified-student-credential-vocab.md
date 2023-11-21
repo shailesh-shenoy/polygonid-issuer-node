@@ -1,3 +1,7 @@
+# studentAddressInteger
+
+Describes the VC holder's wallet address as an integer.
+
 # isVerifiedStudent
 
 Describes whether the VC holder is a verified Student.
