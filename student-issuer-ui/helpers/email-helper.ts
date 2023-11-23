@@ -2,6 +2,7 @@ import { IssuerEmail } from "@/components/IssuerEmail";
 import { IssueDetails, IssueRequest } from "@/types";
 import { render } from "@react-email/components";
 import nodemailer from "nodemailer";
+import QRCode from "qrcode";
 
 const smtpSettings = {
   service: "gmail",
@@ -19,12 +20,15 @@ export const handleEmailFire = async (issueRequest: IssueRequest) => {
     ...smtpSettings,
   });
 
+  const qrCodeData = await generateQRCode(
+    "iden3comm://?request_uri=http://35.245.157.181:3002/v1/qr-store?id=e1983bb5-d8dc-42b6-898e-599aeb560aa2"
+  );
+
   const issueDetails: IssueDetails = {
     studentEmail: issueRequest.studentEmail,
     address: issueRequest.address,
     addressLast15: issueRequest.addressLast15,
-    qrCodeLink:
-      "iden3comm://?request_uri=http://35.245.157.181:3002/v1/qr-store?id=2de47333-17ec-4727-b740-2669cd78b9ad",
+    qrCodeData: qrCodeData,
     expirationDate: new Date(
       new Date().getTime() + expirationTimeInMinutes * 60000
     ),
@@ -37,3 +41,7 @@ export const handleEmailFire = async (issueRequest: IssueRequest) => {
     html: render(IssuerEmail(issueDetails)),
   });
 };
+
+async function generateQRCode(qrCodeLink: string): Promise<string> {
+  return await QRCode.toDataURL(qrCodeLink, { type: "image/png" });
+}

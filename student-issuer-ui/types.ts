@@ -23,6 +23,6 @@ export interface IssueDetails {
   studentEmail: string;
   address: string;
   addressLast15: number;
-  qrCodeLink: string;
+  qrCodeData: string;
   expirationDate: Date;
 }
