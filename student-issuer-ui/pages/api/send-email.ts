@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { handleEmailFire } from "@/helpers/email-helper";
+import { IssueRequest } from "@/types";
 
 export default async function handler(
   req: NextApiRequest,
@@ -8,13 +9,20 @@ export default async function handler(
 ) {
   switch (req.method) {
     case "POST":
-      const { recipientEmail, addressLast15 } = req.body;
-      await handleEmailFire({
-        to: recipientEmail,
-        subject: "Hello from Axios",
-        text: `Your certificate is ready. Your email is ${recipientEmail} and wallet address int is ${addressLast15}`,
-      });
-      return res.status(200).json({ message: "Success" });
+      const issueRequest: IssueRequest = req.body;
+
+      if (
+        !issueRequest.studentEmail ||
+        !issueRequest.address ||
+        !issueRequest.addressLast15
+      ) {
+        return res.status(400).json({ message: "Missing fields" });
+      }
+
+      await handleEmailFire(issueRequest);
+      return res
+        .status(200)
+        .json({ message: "Email sent to the provided email address" });
     default:
       return res.status(405).json({ message: "Method not allowed" });
   }

@@ -6,11 +6,12 @@ import { useAccount } from "wagmi";
 import { fromHex } from "viem";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { IssueRequest } from "@/types";
 
 const Home: NextPage = () => {
   // Get the current wallet address from wagmi and set in state
   const { address, isConnected } = useAccount();
-  const [recipientEmail, setRecipientEmail] = useState("");
+  const [studentEmail, setStudentEmail] = useState("");
   const [isClient, setIsClient] = useState(false);
 
   // Check if client side using useEffect
@@ -28,11 +29,13 @@ const Home: NextPage = () => {
 
   async function handleSubmit(e: any) {
     e.preventDefault();
-
-    const response = await axios.post("/api/send-email", {
-      recipientEmail,
+    const issueRequest: IssueRequest = {
+      studentEmail,
       addressLast15,
-    });
+      address: address?.toString() ?? "",
+    };
+
+    const response = await axios.post("/api/send-email", issueRequest);
 
     if (response.status === 200) {
       alert("Email sent successfully!");
@@ -49,7 +52,27 @@ const Home: NextPage = () => {
           content="Student Issuer allows students to get verified credientials in their PolygonID wallet."
           name="description"
         />
-        <link href="/favicon.ico" rel="icon" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+        <meta name="msapplication-TileColor" content="#da532c" />
+        <meta name="theme-color" content="#ffffff" />
       </Head>
 
       <main className={styles.main}>
@@ -83,15 +106,15 @@ const Home: NextPage = () => {
               <input
                 type="email"
                 placeholder="Enter your student email address."
-                value={recipientEmail}
-                onChange={(e) => setRecipientEmail(e.target.value)}
+                value={studentEmail}
+                onChange={(e) => setStudentEmail(e.target.value)}
               />
             </label>
           </div>
           <button
             type="submit"
             disabled={
-              addressLast15 === 0 || recipientEmail.length === 0 || !isClient
+              addressLast15 === 0 || studentEmail.length === 0 || !isClient
             }
           >
             Generate Student Credential
